@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" >
+	<meta name="format-detection" content="telephone=no" >
+	<title>监听DOM变化</title>
+	<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		.box{
+			min-height: 50px;
+			color: #fff;
+		}
+		#redBox{
+			background-color: red;
+		}
+		#blueBox{
+			background-color: blue;
+		}
+		.btn-box{
+			padding: 10px 0;
+		}
+		.btn-box button{
+			display: inline-block;
+			padding: 5px 10px;
+			border: 0;
+			border-radius: 6px;
+			background-color: #e8e8e8;
+			cursor: pointer;
+			outline: none;
+		}
+		.padding-box{
+			padding: 5px 10px;
+		}
+	</style>
+</head>
+<body>
+	<div class="box" id="redBox"></div>
+	<div class="box" id="blueBox"></div>
+	<div class="btn-box">
+		<button id="add-dom">添加节点</button>
+		<button id="edit-attr">修改属性</button>
+	</div>
+</body>
+<script type="text/javascript">
+	(function() {
+
+		var redEl = document.querySelector('#redBox'),
+		blueEl = document.querySelector('#blueBox'),
+		addDomEl = document.querySelector('#add-dom'),
+		editAttrEl = document.querySelector('#edit-attr');
+
+		/**
+		 * 监听回调
+		 * @param {arr} mutations [节点变化记录列表]
+		 * @param {obj} observer  [构造MutationObserver对象]
+		 */
+		var MutationCallback = function(mutations, observer) {
+			// console.log(mutations, observer);
+			/**
+			 * 打印每一条变动记录
+			 * @param  {obj} mutationRecord [DOM 每次发生变化，就会生成一条变动记录（MutationRecord 实例）。该实例包含了与变动相关的所有信息。有如下信息：
+			 * {
+			 * 	type：观察的变动类型（attribute、characterData或者childList）。
+			 * 	target：发生变动的DOM节点。
+			 * 	addedNodes：新增的DOM节点。
+			 * 	removedNodes：删除的DOM节点。
+			 * 	previousSibling：前一个同级节点，如果没有则返回null。
+			 * 	nextSibling：下一个同级节点，如果没有则返回null。
+			 * 	attributeName：发生变动的属性。如果设置了attributeFilter，则只返回预先指定的属性。
+			 * 	oldValue：变动前的值。这个属性只对attribute和characterData变动有效，如果发生childList变动，则返回null。
+			 * }]
+			 */
+			mutations.forEach(function(mutationRecord) {
+				console.log(mutationRecord);
+			})
+		}
+
+		// 创建监听DOM操作实例
+		var observer = new MutationObserver(MutationCallback);
+
+		var options = {
+			'childList': true,
+			'attributes': true,
+			'attributeOldValue': true
+		};
+
+		/**
+		 * 启动监听
+		 * 第一个参数： 观察的DOM节点
+		 * 第二个参数： 指定所要观察的特定变动{
+		 * 	childList：子节点的变动（指新增，删除或者更改）。
+		 * 	attributes：属性的变动。
+		 * 	characterData：节点内容或节点文本的变动。
+		 * 	subtree：布尔值，表示是否将该观察器应用于该节点的所有后代节点。
+		 * 	attributeOldValue：布尔值，表示观察attributes变动时，是否需要记录变动前的属性值。
+		 * 	characterDataOldValue：布尔值，表示观察characterData变动时，是否需要记录变动前的值。
+		 * 	attributeFilter：数组，表示需要观察的特定属性（比如['class','src']）。
+		 * }
+		 */
+		observer.observe(redEl, options);
+
+		addDomEl.addEventListener('click', function(e) {
+			for(var i = 0; i < 8; i++){
+				var p = document.createElement('p');
+				var node = document.createTextNode('这是新段落。');
+				p.appendChild(node);
+				redEl.appendChild(p);
+			}
+		});
+
+		var flag = true;
+		editAttrEl.addEventListener('click', function(e) {
+			// flag ? redEl.classList.add('padding-box') : redEl.classList.remove('padding-box');
+			// flag = !flag;
+			redEl.setAttribute('ceshi', 'aaa');
+		});
+
+		// disconnect方法用来停止观察。调用该方法后，DOM 再发生变动，也不会触发观察器。
+		// observer.disconnect();
+
+		// takeRecords方法用来清除变动记录，即不再处理未处理的变动。该方法返回变动记录的数组，即所有没有被观察器处理的变动。
+		// observer.takeRecords();
+
+	})()
+</script>
+</html>

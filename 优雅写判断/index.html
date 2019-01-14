@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>优雅写判断</title>
+	<meta charset="utf-8">
+</head>
+<body>
+<button>点击</button>
+</body>
+<script>
+	(function() {
+
+		var btn = document.querySelector('button');
+
+		/******************* 一元判断 *******************/
+		// 用switch判断
+		// function switchFn(status) {
+		// 	switch (status) {
+		// 		case 1:
+		// 			console.log('1');
+		// 			break
+		// 		case 2:
+		// 		case 3:
+		// 			console.log('2, 3');
+		// 			break
+		// 		case 4:
+		// 			console.log('4');
+		// 			break
+		// 		case 5:
+		// 			console.log('5');
+		// 			break
+		// 		default: 
+		// 			console.log('default');
+		// 			break
+		// 	}
+		// }
+
+		// btn.onclick = function() {
+		// 	var random = parseInt(Math.random() * 6);
+		// 	console.log(random);
+		// 	switchFn(random);
+		// }
+
+		// 将判断条件作为对象的属性名，将处理逻辑作为对象的属性值
+		// 这种写法特别适合一元条件判断的情况
+		// var actions = {
+		// 	'1' : ['结果1-1', '结果1-2'],
+		// 	'2' : ['结果2-1', '结果2-2'],
+		// 	'3' : ['结果3-1', '结果3-2'],
+		// 	'4' : ['结果4-1', '结果4-2'],
+		// 	'5' : ['结果5-1', '结果5-2'],
+		// 	'default' : ['结果default-1', '结果default-2'],
+		// }
+
+		// btn.onclick = function() {
+		// 	var random = parseInt(Math.random() * 6);
+		// 	console.log(random);
+		// 	var action = actions[random] || actions['default'],
+		// 		result1 = action[0],
+		// 		result2 = action[1];
+
+		// 	console.log(result1, result2);
+		// }
+
+		// 以下是上面方式es6模式 利用Map对象
+		// 好处以下三点：
+		// 1.一个对象通常都有自己的原型，所以一个对象总有一个"prototype"键。
+		// 2.一个对象的键只能是字符串或者Symbols，但一个Map的键可以是任意值。
+		// 3.你可以通过size属性很容易地得到一个Map的键值对个数，而对象的键值对个数只能手动确认。
+		
+		// const actions = new Map([
+		// 	[1, ['结果1-1', '结果1-2']],
+		// 	[2, ['结果2-1', '结果2-2']],
+		// 	[3, ['结果3-1', '结果3-2']],
+		// 	[4, ['结果4-1', '结果4-2']],
+		// 	[5, ['结果5-1', '结果5-2']],
+		// 	['default', ['结果default-1', '结果default-2']],
+		// ])
+
+		// btn.onclick = function() {
+		// 	let random = parseInt(Math.random() * 6);
+		// 	console.log(random);
+		// 	let action = actions.get(random) || actions.get('default'),
+		// 		result1 = action[0],
+		// 		result2 = action[1];
+
+		// 	console.log(result1, result2);
+		// }
+		
+		/******************* 二元判断 *******************/
+		// 把问题升级一下，以前按钮点击时候只需要判断status，现在还需要判断用户的身份：
+		/**
+		 * 按钮点击事件
+		 * @param {number} status 活动状态：1开团进行中 2开团失败 3 开团成功 4 商品售罄 5 有库存未开团
+		 * @param {string} identity 身份标识：guest客态 master主态
+		 */
+		// const onButtonClick = (status, identity) => {
+		//   if (identity == 'guest') {
+		//     if (status == 1) {
+		//       //do sth
+		//     } else if (status == 2) {
+		//       //do sth
+		//     } else if (status == 3) {
+		//       //do sth
+		//     } else if (status == 4) {
+		//       //do sth
+		//     } else if (status == 5) {
+		//       //do sth
+		//     } else {
+		//       //do sth
+		//     }
+		//   } else if (identity == 'master') {
+		//     if (status == 1) {
+		//       //do sth
+		//     } else if (status == 2) {
+		//       //do sth
+		//     } else if (status == 3) {
+		//       //do sth
+		//     } else if (status == 4) {
+		//       //do sth
+		//     } else if (status == 5) {
+		//       //do sth
+		//     } else {
+		//       //do sth
+		//     }
+		//   }
+		// }
+
+		// 把两个条件拼接成字符串，并通过以条件拼接字符串作为键，以处理函数作为值的Map对象进行查找并执行
+		// es6版
+		// const actions = new Map([
+		// 	['guest_1', (that) => { console.log('guest_1', that) }],
+		// 	['guest_2', (that) => { console.log('guest_2', that) }],
+		// 	['guest_3', (that) => { console.log('guest_3', that) }],
+		// 	['guest_4', (that) => { console.log('guest_4', that) }],
+		// 	['guest_5', (that) => { console.log('guest_5', that) }],
+		// 	['master_1', (that) => { console.log('master_1', that) }],
+		// 	['master_2', (that) => { console.log('master_2', that) }],
+		// 	['master_3', (that) => { console.log('master_3', that) }],
+		// 	['master_4', (that) => { console.log('master_4', that) }],
+		// 	['master_5', (that) => { console.log('master_5', that) }],
+		// 	['default', (that) => { console.log('default', that) }]
+		// ]);
+		// const user = ['guest', 'master'];
+
+		// btn.onclick = function() {
+		// 	let random1 = parseInt(Math.random() * 6),
+		// 	random2 = parseInt(Math.random() * 2);
+			
+		// 	let action = actions.get(`${user[random2]}_${random1}`) || actions.get('default');
+		// 	console.log('btn: ', this, action);
+		// 	action(this);
+		// }
+
+		// 普通版(键名字符串)
+		// var actions = {
+		// 	'guest_1': function(that) { console.log('guest_1', that) },
+		// 	'guest_2': function(that) { console.log('guest_2', that) },
+		// 	'guest_3': function(that) { console.log('guest_3', that) },
+		// 	'guest_4': function(that) { console.log('guest_4', that) },
+		// 	'guest_5': function(that) { console.log('guest_5', that) },
+		// 	'master_1': function(that) { console.log('master_1', that) },
+		// 	'master_2': function(that) { console.log('master_2', that) },
+		// 	'master_3': function(that) { console.log('master_3', that) },
+		// 	'master_4': function(that) { console.log('master_4', that) },
+		// 	'master_5': function(that) { console.log('master_5', that) },
+		// 	'default': function(that) { console.log('default', that) }
+		// }
+		// var user = ['guest', 'master'];
+
+		// btn.onclick = function() {
+		// 	var random1 = parseInt(Math.random() * 6),
+		// 	random2 = parseInt(Math.random() * 2);
+			
+		// 	var action = actions[user[random2] + '_' + random1] || actions['default'];
+		// 	console.log('btn: ', this, action);
+		// 	action(this);
+		// }
+
+		// 不拼接字符串模式 没有 default
+		// const actions = new Map([
+		// 	[{
+		// 		id: 'guest',
+		// 		status: 1
+		// 	}, () => { console.log('guest_1') }],
+		// 	[{
+		// 		id: 'guest',
+		// 		status: 2
+		// 	}, () => { console.log('guest_2') }],
+		// 	[{
+		// 		id: 'guest',
+		// 		status: 3
+		// 	}, () => { console.log('guest_3') }],
+		// 	[{
+		// 		id: 'guest',
+		// 		status: 4
+		// 	}, () => { console.log('guest_4') }],
+		// 	[{
+		// 		id: 'guest',
+		// 		status: 5
+		// 	}, () => { console.log('guest_5') }],
+		// 	[{
+		// 		id: 'master',
+		// 		status: 1
+		// 	}, () => { console.log('master_1') }],
+		// 	[{
+		// 		id: 'guest',
+		// 		status: 2
+		// 	}, () => { console.log('master_2') }],
+		// 	[{
+		// 		id: 'guest',
+		// 		status: 3
+		// 	}, () => { console.log('master_3') }],
+		// 	[{
+		// 		id: 'guest',
+		// 		status: 4
+		// 	}, () => { console.log('master_4') }],
+		// 	[{
+		// 		id: 'guest',
+		// 		status: 5
+		// 	}, () => { console.log('master_5') }],
+		// ])
+		// const user = ['guest', 'master'];
+
+		// btn.onclick = function() {
+		// 	let random1 = parseInt(Math.random() * 6),
+		// 	random2 = parseInt(Math.random() * 2),
+		// 	str = user[random2];
+			
+		// 	let action = [...actions].filter(([key, val]) => (key.id == str && key.status == random1));
+		// 	action.forEach(([key, val]) => val())
+		// }
+		
+		// 有相同处理逻辑，或有一个满足一个条件就执行，利用Map加正则
+		const actions = () => {
+			const functionA = () => { console.log('functionA') };
+			const functionB = () => { console.log('functionB') };
+			const functionC = () => { console.log('functionC') };
+
+			return new Map([
+				[/^guest_[1-4]$/, functionA],
+				[/^guest_5$/, functionB],
+				[/^guest_.*$/, functionC],
+			])
+		}
+		const user = ['guest', 'master'];
+
+		btn.onclick = function() {
+			let random1 = parseInt(Math.random() * 6),
+			random2 = parseInt(Math.random() * 2);
+			
+			let action = [...actions()].filter(([key, val]) => (key.test(`${user[random2]}_${random1}`)))
+			action.forEach(([key, val]) => val())
+		}
+
+	})();
+</script>
+</html>

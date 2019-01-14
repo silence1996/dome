@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" >
+	<meta name="format-detection" content="telephone=no" >
+	<title>css3d</title>
+	<link rel="stylesheet" href="css/index.css" >
+</head>
+<body>
+	<div class="main"></div>
+</body>
+<script src="js/css3d.min.js"></script>
+<script>
+	(function() {
+		var mainEl = document.querySelector('.main');
+		var stage = new C3D.Stage(); // 创建舞台
+		// 设置舞台尺寸背景
+		stage.size(window.innerWidth, window.innerHeight).material({
+			color: '#ccc'
+		}).update();
+		// 添加舞台到页面
+		mainEl.appendChild(stage.el);
+
+		var panoRect = {w: 6940, h: 1080};
+		var imgArr = [
+			{url: 'images/qj_01.jpg'},
+			{url: 'images/qj_02.jpg'},
+			{url: 'images/qj_03.jpg'},
+			{url: 'images/qj_04.jpg'},
+			{url: 'images/qj_05.jpg'},
+			{url: 'images/qj_06.jpg'},
+			{url: 'images/qj_07.jpg'},
+			{url: 'images/qj_08.jpg'},
+			{url: 'images/qj_09.jpg'},
+			{url: 'images/qj_10.jpg'},
+			{url: 'images/qj_11.jpg'},
+			{url: 'images/qj_12.jpg'},
+			{url: 'images/qj_13.jpg'},
+			{url: 'images/qj_14.jpg'},
+			{url: 'images/qj_15.jpg'},
+			{url: 'images/qj_16.jpg'},
+			{url: 'images/qj_17.jpg'},
+			{url: 'images/qj_18.jpg'},
+			{url: 'images/qj_19.jpg'},
+			{url: 'images/qj_20.jpg'}
+		];
+
+		function createPano(imgs, rect) {
+			var _len = imgs.length,
+			_step = rect.w / _len,
+			_radius = Math.floor(_step / 2 / Math.tan(Math.PI / _len)) - 1;
+
+			var sprite = new C3D.Sprite();
+			for(var i = 0; i < _len; i++) {
+				var plane = new C3D.Plane();
+				var r = 360 / _len * i;
+				var a = Math.PI * 2 / _len * i;
+				plane.size(_step, rect.h).position(Math.sin(a) * _radius, 0, -Math.cos(a) * _radius).rotation(0, -r, 0).material({
+					image: imgs[i].url,
+					repeat: 'no-repeat',
+					bothsides: false
+				}).update();
+				sprite.addChild(plane);
+			}
+
+			return sprite;
+		}
+
+		var pano = createPano(imgArr, panoRect);
+
+		console.log(pano);
+		pano.position(0, 0, -400).updateT();
+		stage.addChild(pano);
+
+		//刷新场景
+	    requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame ||
+	            function (callback) {
+	                setTimeout(callback, 1000 / 60);
+	            };
+
+	    function go() {
+	        pano.rotate(0, 0.1, 0).updateT();
+
+	        requestAnimationFrame(go);
+	    }
+
+	    requestAnimationFrame(go);
+
+	})()
+</script>
+</html>
