@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>timeline</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .ball{
+            position: fixed;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background-color: red;
+        }
+        #ball1{
+            top: 80px;
+            left: 120px;
+            transform-origin: 0 100px;
+        }
+        #ball2{
+            top: 50px;
+            right: 50px;
+        }
+        #ball3{
+            bottom: 120px;
+            left: 120px;
+            transform-origin: 0 100px;
+        }
+        #ball4{
+            bottom: 50px;
+            right: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div id="ball1" class="ball"></div>
+    <div id="ball2" class="ball"></div>
+    <div id="ball3" class="ball"></div>
+    <div id="ball4" class="ball"></div>
+</body>
+<script src="js/sprite-timeline.min.js"></script>
+<script src="js/index.js"></script>
+</html>
